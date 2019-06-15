@@ -4,9 +4,9 @@ import urllib.request
 import urllib.parse
 import re
 
-name = input("Inserisci il nome\n")
+name = input("Enter the name\n")
 
-print("Attendere...")
+print("Wait...")
 
 query_string = urllib.parse.urlencode({"search_query" : name})
 html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
@@ -26,4 +26,4 @@ ydl_opts ={
 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     ydl.download([result])
 
-print("Finito")
+print("Finished")
