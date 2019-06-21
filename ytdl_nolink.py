@@ -29,5 +29,5 @@ while True:
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([result])
     
-    if input("Another one? (y/n)") == 'n':
+    if input("Another one? (y/n)\n") == 'n':
         break
