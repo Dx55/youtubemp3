@@ -1,33 +1,26 @@
-#By Dx55
-
-from __future__ import unicode_literals
+# By Dx55
 import youtube_dl
-import urllib.request
-import urllib.parse
-import re
+from youtube_search import YoutubeSearch
+import json
 
 while True:
-    name = input("Enter the name\n")
-    
+    name = str(input("Enter the name\n"))
     print("Wait...")
     
-    query_string = urllib.parse.urlencode({"search_query" : name})
-    html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
-    search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
-    result = ("http://www.youtube.com/watch?v=" + search_results[0])
-    
+    results_json = YoutubeSearch(name, max_results=1).to_json()
+    results = json.loads(results_json)
+
     ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors':
-    [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
     }
-    
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([result])
+        for v in results['videos']:
+            ydl.download(['http://www.youtube.com/watch?v=' + v['id']])
     
     if input("Another one? (y/n)\n") == 'n':
         break
